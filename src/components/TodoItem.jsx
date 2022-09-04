@@ -2,17 +2,15 @@ import {
   ListItem,
   ListItemText,
   Button,
-  ButtonGroup,
-  Input,
 } from '@mui/material';
 
-export const TodoItem = ({ item, onDelete }) => {
-  
+export const TodoItem = ({ item, onRemove }) => {
+
 
   return (
     <ListItem>
-      <Input value={item.title} />
-      <Button variant="outlined" onClick={() => onDelete}>
+      <ListItemText>{item.title}</ListItemText>
+      <Button variant="outlined" onClick={() => onRemove(item.id)}>
         Delete
       </Button>
     </ListItem>

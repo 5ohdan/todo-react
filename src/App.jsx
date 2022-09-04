@@ -23,10 +23,9 @@ export const App = () => {
     inputRef.current.focus();
   };
 
-  const removeHandler = () => {
-    // const filteredTodos = todos.filter((item) => item.id !== id);
-    // setTodos(filteredTodos);
-    console.log(todos)
+  const removeHandler = (id) => {
+    const filteredTodos = todos.filter((item) => item.id !== id);
+    setTodos(filteredTodos);
   };
 
   // const saveChangesHandler = (item) => {};

@@ -7,7 +7,7 @@ export const TodoList = (props) => {
   return (
     <List>
       {props.itemsList.map((item) => (
-        <TodoItem key={item.id} item={item} onRemove={item.onDelete} />
+        <TodoItem key={item.id} item={item} onRemove={props.onDelete} />
       ))}
     </List>
   );
