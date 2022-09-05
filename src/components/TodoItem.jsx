@@ -1,24 +1,27 @@
-import { ListItem, ListItemText, Button, Input } from '@mui/material';
+import { ListItem, ListItemText, Button, Checkbox } from '@mui/material';
 import { useState } from 'react';
+import { EditingForm } from './EditingForm';
 
 export const TodoItem = ({ item, onRemove, onSave }) => {
   const [editValue, setEditValue] = useState(item.title);
   const [isEditing, setIsEditing] = useState(false);
 
-  const saveChangesHandler = (updatedValue) => {
+  const editTodo = () => {
+    setIsEditing(true)
+  }
+
+  const saveChangesHandler = () => {
     setIsEditing(false);
-    onSave(updatedValue, item.id);
+    onSave(editValue, item.id);
   };
 
   const renderedItem = isEditing ? (
-    <>
-      <Input value={editValue} onChange={(e) => setEditValue(e.target.value)} />
-      <Button onClick={() => saveChangesHandler(editValue)}>Save</Button>
-    </>
+    <EditingForm onSave={saveChangesHandler} onEdit={(value) => setEditValue(value)} initState={editValue}/>
   ) : (
     <>
+      <Checkbox />
       <ListItemText>{item.title}</ListItemText>
-      <Button variant="outlined" onClick={() => setIsEditing(true)}>
+      <Button variant="outlined" onClick={editTodo}>
         Edit
       </Button>
       <Button variant="outlined" onClick={() => onRemove(item.id)}>
