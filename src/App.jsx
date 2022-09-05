@@ -28,7 +28,12 @@ export const App = () => {
     setTodos(filteredTodos);
   };
 
-  // const saveChangesHandler = (item) => {};
+  const saveChangesHandler = (updatedValue, id) => {
+    const updatedItemIndex = todos.findIndex((item) => item.id === id);
+    const changingItem = todos[updatedItemIndex];
+    const updatedItem = {...changingItem, title: updatedValue}
+    setTodos(...todos, updatedItem);
+  };
 
   return (
     <>
@@ -47,7 +52,11 @@ export const App = () => {
           Add
         </Button>
       </form>
-      <TodoList itemsList={todos} onDelete={removeHandler} />
+      <TodoList
+        itemsList={todos}
+        onDelete={removeHandler}
+        onUpdate={saveChangesHandler}
+      />
     </>
   );
 };
