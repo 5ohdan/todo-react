@@ -32,7 +32,9 @@ export const App = () => {
     const updatedItemIndex = todos.findIndex((item) => item.id === id);
     const changingItem = todos[updatedItemIndex];
     const updatedItem = {...changingItem, title: updatedValue}
-    setTodos(...todos, updatedItem);
+    let updatedList = todos;
+    updatedList[updatedItemIndex] = updatedItem;
+    setTodos(() => [...updatedList]);
   };
 
   return (
