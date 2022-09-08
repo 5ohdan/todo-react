@@ -1,11 +1,18 @@
 import { useState, useRef } from 'react';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, ButtonGroup } from '@mui/material';
 
 import { v4 as uuidv4 } from 'uuid';
 
 import { TodoList } from './components/TodoList';
 
+const todoConditions = {
+  all: 'All',
+  completed: 'Completed',
+  active: 'Active',
+};
+
 export const App = () => {
+  const [condition, setCondition] = useState(todoConditions.all);
   const [todos, setTodos] = useState([]);
   const [todoInputValue, setTodoInputValue] = useState('');
 
@@ -18,7 +25,10 @@ export const App = () => {
   const addHandler = (e) => {
     e.preventDefault();
     if (todoInputValue.trim().length === 0) return;
-    setTodos([{ id: uuidv4(), title: todoInputValue.trim() }, ...todos]);
+    setTodos([
+      { id: uuidv4(), title: todoInputValue.trim(), done: false },
+      ...todos,
+    ]);
     setTodoInputValue('');
     inputRef.current.focus();
   };
@@ -31,11 +41,30 @@ export const App = () => {
   const saveChangesHandler = (updatedValue, id) => {
     const updatedItemIndex = todos.findIndex((item) => item.id === id);
     const changingItem = todos[updatedItemIndex];
-    const updatedItem = {...changingItem, title: updatedValue}
-    let updatedList = todos;
+    const updatedItem = { ...changingItem, title: updatedValue };
+    let updatedList = [...todos];
     updatedList[updatedItemIndex] = updatedItem;
     setTodos(() => [...updatedList]);
   };
+
+  const doneTodoToggle = (id) => {
+    const toggledTodoIndex = todos.findIndex((item) => item.id === id);
+    const updatableItem = todos[toggledTodoIndex];
+    const toggledItem = { ...updatableItem, done: !updatableItem.done };
+    console.log(toggledItem);
+    let updatedList = [...todos];
+    updatedList[toggledTodoIndex] = toggledItem;
+    setTodos(() => [...updatedList]);
+  };
+
+  let renderedList = [...todos];
+  if (condition === todoConditions.active) {
+    renderedList = todos.filter((item) => item.done === false);
+  } else if (condition === todoConditions.completed) {
+    renderedList = todos.filter((item) => item.done === true);
+  } else if (condition === todoConditions.all) {
+    renderedList;
+  }
 
   return (
     <>
@@ -54,10 +83,22 @@ export const App = () => {
           Add
         </Button>
       </form>
+      <ButtonGroup>
+        <Button onClick={() => setCondition(todoConditions.all)}>
+          {todoConditions.all}
+        </Button>
+        <Button onClick={() => setCondition(todoConditions.active)}>
+          {todoConditions.active}
+        </Button>
+        <Button onClick={() => setCondition(todoConditions.completed)}>
+          {todoConditions.completed}
+        </Button>
+      </ButtonGroup>
       <TodoList
-        itemsList={todos}
+        itemsList={renderedList}
         onDelete={removeHandler}
         onUpdate={saveChangesHandler}
+        onDone={doneTodoToggle}
       />
     </>
   );
