@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { TextField, Button, ButtonGroup } from '@mui/material';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -13,8 +13,18 @@ const todoConditions = {
 
 export const App = () => {
   const [condition, setCondition] = useState(todoConditions.all);
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    if (localStorage.todos === undefined) {
+      return [];
+    } else {
+      return JSON.parse(localStorage.todos);
+    }
+  });
   const [todoInputValue, setTodoInputValue] = useState('');
+
+  useEffect(() => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const inputRef = useRef();
 
