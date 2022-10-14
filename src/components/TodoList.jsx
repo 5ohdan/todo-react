@@ -1,14 +1,17 @@
-import { List } from '@mui/material';
-
 import { TodoItem } from './TodoItem';
 
-export const TodoList = (props) => {
-
+export const TodoList = ({ itemsList, onDelete, onUpdate, onDone }) => {
   return (
-    <List>
-      {props.itemsList.map((item) => (
-        <TodoItem key={item.id} item={item} onRemove={props.onDelete} onSave={props.onUpdate} onDone={props.onDone} />
+    <ul className="flex flex-col space-y-2 min-w-full">
+      {itemsList.map((item) => (
+        <TodoItem
+          key={item.id}
+          item={item}
+          onRemove={onDelete}
+          onSave={onUpdate}
+          onDone={onDone}
+        />
       ))}
-    </List>
+    </ul>
   );
 };

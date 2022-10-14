@@ -1,22 +1,26 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import { Input, Button } from "@mui/material";
-
-export const EditingForm = (props) => {
-  const inputRef =  useRef();
+export const EditingForm = ({ onEdit, onSave, initState }) => {
+  const inputRef = useRef();
 
   useEffect(() => {
     inputRef.current.focus();
-  }, [])
+  }, []);
 
   return (
-    <>
-      <Input
+    <form onSubmit={onSave} className="flex flex-row min-w-full">
+      <input
+        className="border-2 rounded-l-lg border-blue-800 p-2 w-full"
         ref={inputRef}
-        value={props.initState}
-        onChange={(e) => props.onEdit(e.target.value)}
+        value={initState}
+        onChange={(e) => onEdit(e.target.value)}
       />
-      <Button onClick={() => props.onSave()}>Save</Button>
-    </>
+      <button
+        className="bg-blue-700 text-white p-2 border-2 border-blue-700 rounded-r-lg hover:bg-blue-800"
+        onClick={() => onSave()}
+      >
+        Save
+      </button>
+    </form>
   );
 };

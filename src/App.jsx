@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import { TextField, Button, ButtonGroup } from '@mui/material';
 
 import { v4 as uuidv4 } from 'uuid';
 
@@ -77,40 +76,51 @@ export const App = () => {
   }
 
   return (
-    <>
-      <form onSubmit={addHandler}>
-        <TextField
+    <div className="container md:mx-auto flex flex-col items-center">
+      <form onSubmit={addHandler} className="m-2">
+        <input
+          className="p-2 border-blue-700 border-2 rounded-l-lg"
           ref={inputRef}
           id="outlined-basic"
-          label="Input todo"
-          variant="outlined"
           type="text"
           value={todoInputValue}
           placeholder="Input todo"
           onChange={todoInputHandler}
         />
-        <Button variant="outlined" type="submit">
+        <button
+          className="bg-blue-700 text-white p-2 border-2 border-blue-700 rounded-r-lg hover:bg-blue-800"
+          type="submit"
+        >
           Add
-        </Button>
+        </button>
       </form>
-      <ButtonGroup>
-        <Button onClick={() => setCondition(todoConditions.all)}>
+      <div className="mx-auto m-2 p-2 flex justify-between w-max mt-0">
+        <button
+          className="p-2 bg-blue-700 text-white border-blue-800 border-2 w-28 rounded-l-lg hover:bg-blue-800"
+          onClick={() => setCondition(todoConditions.all)}
+        >
           {todoConditions.all}
-        </Button>
-        <Button onClick={() => setCondition(todoConditions.active)}>
+        </button>
+        <button
+          className="p-2 bg-blue-700 text-white border-blue-800 border-t-2 border-b-2 w-28 hover:bg-blue-800"
+          onClick={() => setCondition(todoConditions.active)}
+        >
           {todoConditions.active}
-        </Button>
-        <Button onClick={() => setCondition(todoConditions.completed)}>
+        </button>
+        <button
+          className="p-2 bg-blue-700 text-white border-blue-800 border-2 w-28 rounded-r-lg hover:bg-blue-800"
+          onClick={() => setCondition(todoConditions.completed)}
+        >
           {todoConditions.completed}
-        </Button>
-      </ButtonGroup>
+        </button>
+      </div>
       <TodoList
         itemsList={renderedList}
         onDelete={removeHandler}
         onUpdate={saveChangesHandler}
         onDone={doneTodoToggle}
       />
-    </>
+    </div>
   );
 };
 

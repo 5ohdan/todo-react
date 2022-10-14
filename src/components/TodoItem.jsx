@@ -1,4 +1,3 @@
-import { ListItem, ListItemText, Button, Checkbox } from '@mui/material';
 import { useState } from 'react';
 import { EditingForm } from './EditingForm';
 
@@ -22,17 +21,34 @@ export const TodoItem = ({ item, onRemove, onSave, onDone }) => {
       initState={editValue}
     />
   ) : (
-    <>
-      <Checkbox onChange={() => onDone(item.id)} checked={item.done}/>
-      <ListItemText>{item.title}</ListItemText>
-      <Button variant="outlined" onClick={editTodo}>
+    <div className="flex flex-row min-w-full">
+      <input
+        className="appearance-none bg-blue-100 w-11 h-11 border-blue-800 border-2 border-r-0 rounded-l-lg cursor-pointer checked:bg-blue-700 peer"
+        type="checkbox"
+        id={item.title}
+        onChange={() => onDone(item.id)}
+        checked={item.done}
+      />
+      <label
+        className="border-2 border-blue-800 p-2 w-full peer-checked:line-through"
+        htmlFor={item.title}
+      >
+        {item.title}
+      </label>
+      <button
+        className="bg-blue-700 border-2 border-blue-800 text-white p-2 focus:bg-blue-800"
+        onClick={editTodo}
+      >
         Edit
-      </Button>
-      <Button variant="outlined" onClick={() => onRemove(item.id)}>
+      </button>
+      <button
+        className="bg-blue-700 border-2 border-l-0 border-blue-800 rounded-r-lg text-white p-2 focus:bg-blue-800"
+        onClick={() => onRemove(item.id)}
+      >
         Delete
-      </Button>
-    </>
+      </button>
+    </div>
   );
 
-  return <ListItem>{renderedItem}</ListItem>;
+  return <li>{renderedItem}</li>;
 };
