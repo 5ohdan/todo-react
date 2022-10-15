@@ -69,7 +69,6 @@ export const App = () => {
     const toggledTodoIndex = todos.findIndex((item: Todo) => item.id === id);
     const updatableItem = todos[toggledTodoIndex];
     const toggledItem = { ...updatableItem, done: !updatableItem.done };
-    console.log(toggledItem);
     let updatedList = [...todos];
     updatedList[toggledTodoIndex] = toggledItem;
     setTodos(() => [...updatedList]);
