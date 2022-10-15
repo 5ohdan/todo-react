@@ -1,10 +1,23 @@
+import React, { ChangeEvent } from 'react';
 import { useEffect, useRef } from 'react';
 
-export const EditingForm = ({ onEdit, onSave, initState }) => {
-  const inputRef = useRef();
+interface EditingFormProps {
+  onEdit: (value: string) => void;
+  onSave: () => void;
+  initState: string;
+}
+
+export const EditingForm = ({
+  onEdit,
+  onSave,
+  initState,
+}: EditingFormProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, []);
 
   return (

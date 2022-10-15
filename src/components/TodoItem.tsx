@@ -1,7 +1,16 @@
+import React from 'react';
 import { useState } from 'react';
+import { Todo } from '../App';
 import { EditingForm } from './EditingForm';
 
-export const TodoItem = ({ item, onRemove, onSave, onDone }) => {
+interface TodoItemProps {
+  item: Todo;
+  onRemove: (id: string) => void;
+  onSave: (updatedValue: string, id: string) => void;
+  onDone: (id: string) => void;
+}
+
+export const TodoItem = ({ item, onRemove, onSave, onDone }: TodoItemProps) => {
   const [editValue, setEditValue] = useState(item.title);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -17,7 +26,7 @@ export const TodoItem = ({ item, onRemove, onSave, onDone }) => {
   const renderedItem = isEditing ? (
     <EditingForm
       onSave={saveChangesHandler}
-      onEdit={(value) => setEditValue(value)}
+      onEdit={(value: string) => setEditValue(value)}
       initState={editValue}
     />
   ) : (

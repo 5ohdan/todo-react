@@ -1,8 +1,15 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useMemo } from 'react';
+import { useState, useRef, useEffect, ChangeEvent } from 'react';
 
 import { v4 as uuidv4 } from 'uuid';
 
 import { TodoList } from './components/TodoList';
+
+export interface Todo {
+  id: string;
+  title: string;
+  done: boolean;
+}
 
 const todoConditions = {
   all: 'All',
@@ -12,7 +19,7 @@ const todoConditions = {
 
 export const App = () => {
   const [condition, setCondition] = useState(todoConditions.all);
-  const [todos, setTodos] = useState(() => {
+  const [todos, setTodos] = useState<Todo[]>(() => {
     if (localStorage.todos === undefined) {
       return [];
     } else {
@@ -25,39 +32,41 @@ export const App = () => {
     localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
-  const inputRef = useRef();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const todoInputHandler = (event) => {
+  const todoInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
     setTodoInputValue(event.target.value);
   };
 
-  const addHandler = (e) => {
-    e.preventDefault();
+  const addHandler = (event: ChangeEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (todoInputValue.trim().length === 0) return;
     setTodos([
       { id: uuidv4(), title: todoInputValue.trim(), done: false },
       ...todos,
     ]);
     setTodoInputValue('');
-    inputRef.current.focus();
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
-  const removeHandler = (id) => {
-    const filteredTodos = todos.filter((item) => item.id !== id);
+  const removeHandler = (id: string) => {
+    const filteredTodos = todos.filter((item: Todo) => item.id !== id);
     setTodos(filteredTodos);
   };
 
-  const saveChangesHandler = (updatedValue, id) => {
-    const updatedItemIndex = todos.findIndex((item) => item.id === id);
+  const saveChangesHandler = (updatedValue: string, id: string) => {
+    const updatedItemIndex = todos.findIndex((item: Todo) => item.id === id);
     const changingItem = todos[updatedItemIndex];
     const updatedItem = { ...changingItem, title: updatedValue };
     let updatedList = [...todos];
     updatedList[updatedItemIndex] = updatedItem;
-    setTodos(() => [...updatedList]);
+    setTodos(updatedList);
   };
 
-  const doneTodoToggle = (id) => {
-    const toggledTodoIndex = todos.findIndex((item) => item.id === id);
+  const doneTodoToggle = (id: string) => {
+    const toggledTodoIndex = todos.findIndex((item: Todo) => item.id === id);
     const updatableItem = todos[toggledTodoIndex];
     const toggledItem = { ...updatableItem, done: !updatableItem.done };
     console.log(toggledItem);
@@ -66,14 +75,14 @@ export const App = () => {
     setTodos(() => [...updatedList]);
   };
 
-  let renderedList = [...todos];
-  if (condition === todoConditions.active) {
-    renderedList = todos.filter((item) => item.done === false);
-  } else if (condition === todoConditions.completed) {
-    renderedList = todos.filter((item) => item.done === true);
-  } else if (condition === todoConditions.all) {
-    renderedList;
-  }
+  const renderedList = useMemo(() => {
+    if (condition === todoConditions.active) {
+      return todos.filter((item: Todo) => item.done === false);
+    } else if (condition === todoConditions.completed) {
+      return todos.filter((item: Todo) => item.done === true);
+    }
+    return [...todos];
+  }, [todos, condition]);
 
   return (
     <div className="container md:mx-auto flex flex-col items-center">
