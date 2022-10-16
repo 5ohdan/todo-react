@@ -30,7 +30,7 @@ export const EditingForm = ({
       />
       <button
         className="bg-blue-700 text-white p-2 border-2 border-blue-700 rounded-r-lg hover:bg-blue-800"
-        onClick={() => onSave()}
+        onClick={onSave}
       >
         Save
       </button>
