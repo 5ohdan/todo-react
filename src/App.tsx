@@ -5,16 +5,12 @@ import React, {
   useEffect,
   ChangeEvent,
 } from 'react';
-
+import { Todo } from './utils/interfaces.js';
 import { v4 as uuidv4 } from 'uuid';
-
-import { TodoList } from './components/TodoList';
-
-export interface Todo {
-  id: string;
-  title: string;
-  done: boolean;
-}
+import { AuthComponent } from './components/AuthComponent.js';
+import { TodoList } from './components/TodoList.js';
+import { supabase } from './supabaseClient.js';
+import { isLogged } from './utils/helpers.js';
 
 const todoConditions = {
   all: 'All',
@@ -24,6 +20,7 @@ const todoConditions = {
 
 export const App = () => {
   const [condition, setCondition] = useState(todoConditions.all);
+  const [logged, setLogged] = useState(false);
   const [todos, setTodos] = useState<Todo[]>(() => {
     if (localStorage.todos === undefined) {
       return [];
@@ -32,6 +29,11 @@ export const App = () => {
     }
   });
   const [todoInputValue, setTodoInputValue] = useState('');
+
+  useEffect(() => {
+    const user = isLogged();
+    console.log(user);
+  });
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -57,12 +59,12 @@ export const App = () => {
   };
 
   const removeHandler = (id: string) => {
-    const filteredTodos = todos.filter((item: Todo) => item.id !== id);
+    const filteredTodos = todos.filter((item) => item.id !== id);
     setTodos(filteredTodos);
   };
 
   const saveChangesHandler = (updatedValue: string, id: string) => {
-    const updatedItemIndex = todos.findIndex((item: Todo) => item.id === id);
+    const updatedItemIndex = todos.findIndex((item) => item.id === id);
     const changingItem = todos[updatedItemIndex];
     const updatedItem = { ...changingItem, title: updatedValue };
     let updatedList = [...todos];
@@ -71,7 +73,7 @@ export const App = () => {
   };
 
   const doneTodoToggle = (id: string) => {
-    const toggledTodoIndex = todos.findIndex((item: Todo) => item.id === id);
+    const toggledTodoIndex = todos.findIndex((item) => item.id === id);
     const updatableItem = todos[toggledTodoIndex];
     const toggledItem = { ...updatableItem, done: !updatableItem.done };
     let updatedList = [...todos];
@@ -81,14 +83,14 @@ export const App = () => {
 
   const renderedList = useMemo(() => {
     if (condition === todoConditions.active) {
-      return todos.filter((item: Todo) => item.done === false);
+      return todos.filter((item) => item.done === false);
     } else if (condition === todoConditions.completed) {
-      return todos.filter((item: Todo) => item.done === true);
+      return todos.filter((item) => item.done === true);
     }
     return [...todos];
   }, [todos, condition]);
 
-  return (
+  return logged ? (
     <div className="container md:mx-auto flex flex-col items-center">
       <form onSubmit={addHandler} className="m-2">
         <input
@@ -134,6 +136,8 @@ export const App = () => {
         onDone={doneTodoToggle}
       />
     </div>
+  ) : (
+    <AuthComponent />
   );
 };
 

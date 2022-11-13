@@ -1,11 +1,5 @@
-import React, { ChangeEvent } from 'react';
-import { useEffect, useRef } from 'react';
-
-interface EditingFormProps {
-  onEdit: (value: string) => void;
-  onSave: () => void;
-  initState: string;
-}
+import React, { useEffect, useRef } from 'react';
+import { EditingFormProps } from '../utils/interfaces.js';
 
 export const EditingForm = ({
   onEdit,

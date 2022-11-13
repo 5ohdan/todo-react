@@ -1,14 +1,7 @@
-import React from 'react';
-import { useState } from 'react';
-import { Todo } from '../App';
-import { EditingForm } from './EditingForm';
-
-interface TodoItemProps {
-  item: Todo;
-  onRemove: (id: string) => void;
-  onSave: (updatedValue: string, id: string) => void;
-  onDone: (id: string) => void;
-}
+import React, { useState } from 'react';
+import { Todo } from '../utils/interfaces.js';
+import { EditingForm } from './EditingForm.js';
+import { TodoItemProps } from '../utils/interfaces.js';
 
 export const TodoItem = ({ item, onRemove, onSave, onDone }: TodoItemProps) => {
   const [editValue, setEditValue] = useState(item.title);

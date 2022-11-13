@@ -1,13 +1,7 @@
 import React from 'react';
-import { TodoItem } from './TodoItem';
-import { Todo } from '../App';
+import { TodoItem } from './TodoItem.js';
 
-interface TodoListProps {
-  itemsList: Todo[];
-  onDelete: (id: string) => void;
-  onUpdate: (updatedValue: string, id: string) => void;
-  onDone: (id: string) => void;
-}
+import { TodoListProps, Todo } from '../utils/interfaces.js';
 
 export const TodoList = ({
   itemsList,
