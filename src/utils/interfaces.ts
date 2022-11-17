@@ -23,3 +23,7 @@ export interface TodoListProps {
   onUpdate: (updatedValue: string, id: string) => void;
   onDone: (id: string) => void;
 }
+
+export interface AuthComponentProps {
+  onLogin: (isLogged: boolean) => void;
+}

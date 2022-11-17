@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient.js';
+import { AuthComponentProps } from '../utils/interfaces.js';
 
-export const AuthComponent = () => {
+export const AuthComponent = ({ onLogin }: AuthComponentProps) => {
   const loginHandler = async () => {
     try {
       let { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
       });
       if (error) throw new Error();
+      onLogin(true);
       console.log(data);
     } catch (error) {
       console.log(error);

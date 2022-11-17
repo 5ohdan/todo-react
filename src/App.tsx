@@ -9,8 +9,7 @@ import { Todo } from './utils/interfaces.js';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthComponent } from './components/AuthComponent.js';
 import { TodoList } from './components/TodoList.js';
-import { supabase } from './supabaseClient.js';
-import { isLogged } from './utils/helpers.js';
+import { isLogged, signOut } from './utils/helpers.js';
 
 const todoConditions = {
   all: 'All',
@@ -32,8 +31,8 @@ export const App = () => {
 
   useEffect(() => {
     const user = isLogged();
-    console.log(user);
-  });
+    if (user !== null) setLogged(true);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('todos', JSON.stringify(todos));
@@ -83,9 +82,9 @@ export const App = () => {
 
   const renderedList = useMemo(() => {
     if (condition === todoConditions.active) {
-      return todos.filter((item) => item.done === false);
+      return todos.filter((item) => !item.done);
     } else if (condition === todoConditions.completed) {
-      return todos.filter((item) => item.done === true);
+      return todos.filter((item) => item.done);
     }
     return [...todos];
   }, [todos, condition]);
@@ -135,9 +134,17 @@ export const App = () => {
         onUpdate={saveChangesHandler}
         onDone={doneTodoToggle}
       />
+      <button
+        onClick={async () => {
+          await signOut();
+          setLogged(false);
+        }}
+      >
+        Sign out
+      </button>
     </div>
   ) : (
-    <AuthComponent />
+    <AuthComponent onLogin={setLogged} />
   );
 };
 
